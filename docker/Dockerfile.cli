@@ -1,0 +1,5 @@
+FROM nvcr.io/nvidia/tensorrt-llm/release:1.2.1
+WORKDIR /workspace
+COPY scripts/cli_pipeline.sh /workspace/scripts/cli_pipeline.sh
+RUN chmod +x /workspace/scripts/cli_pipeline.sh
+ENTRYPOINT ["/workspace/scripts/cli_pipeline.sh"]

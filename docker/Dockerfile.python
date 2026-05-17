@@ -1,0 +1,4 @@
+FROM nvcr.io/nvidia/tensorrt-llm/release:1.2.1
+WORKDIR /workspace
+COPY src/python_pipeline.py /workspace/src/python_pipeline.py
+ENTRYPOINT ["python3", "/workspace/src/python_pipeline.py"]
