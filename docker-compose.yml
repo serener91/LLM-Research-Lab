@@ -1,0 +1,50 @@
+services:
+  trtllm-cli:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.cli
+    container_name: trtllm-cli
+    environment:
+      MODEL_DIR: /workspace-data/model
+      ENGINE_DIR: /workspace-data/engine
+      TOKENIZER_DIR: /workspace-data/model
+      MAX_BATCH_SIZE: "16"
+      MAX_INPUT_LEN: "4096"
+      MAX_SEQ_LEN: "8192"
+      PORT: "8000"
+    volumes:
+      - ./workspace-data:/workspace-data
+    ports:
+      - "8000:8000"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+  trtllm-python:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.python
+    container_name: trtllm-python
+    command:
+      - --model
+      - TinyLlama/TinyLlama-1.1B-Chat-v1.0
+      - --prompts
+      - Hello, my name is
+      - The future of AI is
+      - --iterations
+      - "5"
+      - --max-tokens
+      - "64"
+    volumes:
+      - ./workspace-data:/workspace-data
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
